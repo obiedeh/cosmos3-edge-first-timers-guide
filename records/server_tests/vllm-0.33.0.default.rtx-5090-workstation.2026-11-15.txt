@@ -1,0 +1,30 @@
+# vLLM 0.33.0 on rtx-5090-workstation, 2026-11-15
+# Server: vllm serve <model folder> --served-model-name nvidia/Cosmos3-Edge --port 8011 --max-model-len 8192 --gpu-memory-utilization 0.45 --mm-processor-kwargs {"do_resize": true, "min_pixels": 4096, "max_pixels": 16777216} --media-io-kwargs {"video": {"num_frames": -1}} 
+# Client: python run_server_tests.py http://127.0.0.1:8011/v1
+
+[image, nothing set (thinking is on by default)]
+    prompt_tokens=2254 completion_tokens=30 finish=stop
+    content='Got it, let\'s look at the image. The tape on the table is blue. So the answer should be "blue".</think>\n\nblue'
+[image, thinking off]
+    prompt_tokens=2254 completion_tokens=2 finish=stop
+    content='Blue'
+[video, server defaults, thinking off]
+    prompt_tokens=5306 completion_tokens=12 finish=stop
+    content='7,3,9,4,8,2'
+[video, media_io_kwargs fps=1]
+    ERROR BadRequestError: Error code: 400 - Per-request media_io_kwargs are disabled by default because they can change multimodal media loading resource usage. Start the server with --trust-request-mm-kwargs only when clients are trusted. (parameter=media_io_kwargs)
+[video, media_io_kwargs fps=4]
+    ERROR BadRequestError: Error code: 400 - Per-request media_io_kwargs are disabled by default because they can change multimodal media loading resource usage. Start the server with --trust-request-mm-kwargs only when clients are trusted. (parameter=media_io_kwargs)
+[video, fps=4 inside mm_processor_kwargs]
+    ERROR BadRequestError: Error code: 400 - Per-request mm_processor_kwargs are disabled by default because they can change multimodal preprocessing resource usage. Start the server with --trust-request-mm-kwargs only when clients are trusted. (parameter=mm_processor_kwargs)
+[image, mm_processor_kwargs max_pixels = 256 x 1024]
+    ERROR BadRequestError: Error code: 400 - Per-request mm_processor_kwargs are disabled by default because they can change multimodal preprocessing resource usage. Start the server with --trust-request-mm-kwargs only when clients are trusted. (parameter=mm_processor_kwargs)
+[video, fps=4 and max_pixels = 4096 x 1024]
+    ERROR BadRequestError: Error code: 400 - Per-request mm_processor_kwargs are disabled by default because they can change multimodal preprocessing resource usage. Start the server with --trust-request-mm-kwargs only when clients are trusted. (parameter=mm_processor_kwargs)
+[one-minute video, fps=4 (longer than the context limit)]
+    ERROR BadRequestError: Error code: 400 - Per-request media_io_kwargs are disabled by default because they can change multimodal media loading resource usage. Start the server with --trust-request-mm-kwargs only when clients are trusted. (parameter=media_io_kwargs)
+[image, max_tokens above the context limit]
+    ERROR BadRequestError: Error code: 400 - max_tokens=9000 cannot be greater than max_model_len=8192. Please request fewer output tokens. (parameter=max_tokens, value=9000)
+[image, top_k and repetition_penalty in extra_body]
+    prompt_tokens=2256 completion_tokens=24 finish=stop
+    content='The robot should use its gripper to pick up the blue tape roll and place it inside the wicker basket.'

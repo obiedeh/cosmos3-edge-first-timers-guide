@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Sample media and test files the notebook writes beside itself never enter git.
+/*.mp4
+/*.png
+/*.jpg
+out/
