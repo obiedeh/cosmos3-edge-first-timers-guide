@@ -28,7 +28,7 @@ The settings I learned on Reason 2 do not all carry over. Three things were diff
 
 So I ran the same tests again on Cosmos3-Edge and wrote down what each setting does.
 
-I built it for Google Colab on purpose, to make the model easier to learn and adopt. It runs in a browser with nothing to install on your own machine. It ran every cell on Colab's T4 GPU runtime on 2026-11-15.
+I built it for Google Colab on purpose, to make the model easier to learn and adopt. It runs in a browser with nothing to install on your own machine. It ran every cell on Colab's T4 and A100 GPU runtimes on 2026-11-15.
 
 ## Why Cosmos 3
 
@@ -116,7 +116,7 @@ NVIDIA's own figures for the same reasoner on Jetson boards, from the model card
 | Jetson AGX Thor T5000, 128 GB, MAXN | 42.6 tokens a second | 3.17 s |
 | Jetson AGX Orin, 64 GB | 12.3 tokens a second | 10.81 s |
 
-What NVIDIA lists as supported: Ampere, Hopper and Blackwell GPUs, on Linux, with BF16 as the only tested precision. Colab's free T4 is an older generation (Turing) that is not on that list and does not run BF16 natively, which is why the notebook loads float16. On this workstation float16 and BF16 gave the same scores (Part 16). The notebook ran every cell on a Colab T4 on 2026-11-15.
+What NVIDIA lists as supported: Ampere, Hopper and Blackwell GPUs, on Linux, with BF16 as the only tested precision. Colab's free T4 is an older generation (Turing) that is not on that list and does not run BF16 natively, which is why the notebook loads float16. On this workstation float16 and BF16 gave the same scores (Part 16). The notebook ran every cell on a Colab T4 on 2026-11-15, and on a Colab A100 the same day.
 
 ## What it covers
 
@@ -160,7 +160,7 @@ The first run downloads about 7.7 GB of model files, and about 50 MB of NVIDIA's
 | Model | `nvidia/Cosmos3-Edge`, reasoner only, float16 weights, about 7.7 GB to download and 4.9 GB on the GPU |
 | Library | `transformers==5.23.0`, with `accelerate` 1.15.0 and `bitsandbytes` 0.50.2 |
 | Measured on | `rtx-5090-workstation`, Python 3.12.3, PyTorch 2.11.0 with CUDA 12.8, 2026-11-15 |
-| Colab | T4 GPU runtime, 2026-11-15: every cell ran. That output is not kept in this repo; the figures here are from `rtx-5090-workstation`. |
+| Colab | T4 and A100 GPU runtimes, 2026-11-15: every cell ran on both. That output is not kept in this repo; the figures here are from `rtx-5090-workstation`. |
 | Server tests (Part 17) | vLLM 0.33.0 on `rtx-5090-workstation`, 2026-11-15. Reference text in the notebook, not executed cells. The requests and replies are in [`records/server_tests/`](records/server_tests/). |
 
 NVIDIA states that it tested the model in BF16 precision only. The notebook loads float16 so that it can run on GPUs without native BF16. On `rtx-5090-workstation` the two gave the same scores and the same speed (Part 16).
@@ -251,7 +251,7 @@ Kept as found. Nothing here was cleaned up to make the work look smoother.
 
 ## What is not established
 
-- **The Colab run is not recorded.** Every cell ran on a Colab T4, but its scores and timings were not kept, so whether they match the workstation's is not shown.
+- **The Colab runs are not recorded.** Every cell ran on a Colab T4 and a Colab A100, but their scores and timings were not kept, so whether they match the workstation's is not shown.
 - **These are small tests.** Each accuracy test has 4 to 12 questions. They show an effect. They are not benchmarks.
 - **Timings are from an RTX 5090.** Expect slower numbers on other GPUs.
 - **One machine.** Two runs gave the same scores. Only the first has clean timings.
