@@ -30,12 +30,54 @@ So I ran the same tests again on Cosmos3-Edge and wrote down what each setting d
 
 I built it for Google Colab on purpose, to make the model easier to learn and adopt. It runs in a browser with nothing to install on your own machine. The notebook has not been run on Colab yet; see "What is not established".
 
-## The model, its sizes, and why Edge
+## Why Cosmos 3
 
-Cosmos 3 is NVIDIA's family of world models for physical AI. Each model has two parts. The reasoner reads text, images and video and answers in text. The generator produces video, images and robot actions. This guide covers the reasoner only.
+Cosmos 3 is NVIDIA's newest family of world models for physical AI, released on Hugging Face on 2026-07-20. Each model has two parts. The **reasoner** reads text, images and video and answers in text. The **generator** produces video, images and robot actions. One architecture covers understanding, generation and action. Cosmos Reason 2 was a reasoning model only. This guide covers the reasoner only.
+
+Three reasons I moved my test bench to it:
+
+- **It is the current family.** NVIDIA now maintains the Cosmos Reason 2 repository in limited form, and its current cookbook and reasoner guides are written for Cosmos 3.
+- **The smallest size is made for edge boards.** NVIDIA lists Jetson AGX Orin and Jetson AGX Thor among the targets for Cosmos3-Edge, the boards my projects run on.
+- **It is easier to start with.** The model is not gated, so there is no license page to accept and no account is needed to download it. It is released under the [OpenMDW 1.1](https://openmdw.ai/license/1-1/) license, which NVIDIA states allows commercial use.
 
 - NVIDIA's code, cookbook and model reference: [github.com/NVIDIA/cosmos](https://github.com/NVIDIA/cosmos)
 - The reasoner prompt guide and the Transformers and vLLM references: [github.com/NVIDIA/cosmos-framework](https://github.com/NVIDIA/cosmos-framework)
+
+## Cosmos 3 and Cosmos Reason 2: what is the same, what is different
+
+If you know Cosmos Reason 2, most of what you know still applies. The table lists what carries over and what does not. Rows marked "measured" come from this guide and from [the Reason 2 guide](https://github.com/obiedeh/cosmos-reason2-first-timers-guide), on the same workstation. The rest is from NVIDIA's model cards and documentation.
+
+| | Cosmos Reason 2 (2B) | Cosmos3-Edge reasoner |
+|---|---|---|
+| **Same** | | |
+| Input and output | Text, images and video in, text out | Text, images and video in, text out |
+| Prompt rules | Media before text, system prompt `You are a helpful assistant.` | The same |
+| Answer formats | Boxes and points on a 0 to 1000 grid, timestamps for video, `<think>` tags | The same |
+| Video frame rate NVIDIA recommends | 4 per second | 4 per second |
+| NVIDIA's sampling values | temperature 0.7, top_p 0.8, top_k 20 (0.6, 0.95, 20 with thinking) | The same |
+| Picture detail | One vision token per 32 x 32 pixel patch | The same |
+| Loading and serving | `transformers` in Python, vLLM for an OpenAI-compatible server | The same |
+| **Different** | | |
+| Family | A reasoning model only, in 2B, 8B and 32B | Reasoner and generator in one model, in 4B, 16B and 64B |
+| Built on | Qwen3-VL | A SigLIP2 vision encoder and a 28-layer language model |
+| Access and license | Gated, NVIDIA Open Model License | Not gated, OpenMDW 1.1 |
+| `transformers` release | 4.57.3, the version NVIDIA's sample pins | 5.x. This guide uses 5.23.0 |
+| Thinking | Off unless you add an instruction to the prompt | On unless you switch it off in the chat template (measured, Part 9) |
+| Video tokens | Two neighboring frames share one set of tokens | Every frame gets its own tokens, so a clip costs more (measured, Part 6) |
+| Weights on the GPU, 16-bit | 4.3 GB (measured) | 4.9 GB (measured) |
+| Speed on a 200-token description | 113 tokens a second (measured) | 147 tokens a second (measured) |
+| 4-bit loading with `bitsandbytes` | Works, at a small cost in accuracy (measured) | Returns no readable text (measured, Part 16) |
+
+### What it does better, and what it costs
+
+From the identical tests in both guides (full table under "Against Cosmos Reason 2" below):
+
+- **Better here:** faster per token; it did not describe objects that are not in the picture, where Reason 2 described a coffee cup that is not there; it scored 2 to 4 of 6 on the warehouse clip against 1 to 3 of 6; batching gave 1.6x against 1.5x.
+- **Costs here:** about 0.6 GB more memory; 4-bit loading does not work; a video needs more tokens per frame; thinking must be switched off for short answers; at the smallest image budget it read 0 of 6 labels against 1 of 6; on the one-minute clip, splitting into short clips did worse than one call, the opposite of Reason 2.
+
+These are small tests on one machine. They show where the two models behave differently. They do not rank them.
+
+## The sizes, and why Edge
 
 NVIDIA publishes three sizes on Hugging Face:
 
@@ -45,13 +87,36 @@ NVIDIA publishes three sizes on Hugging Face:
 | [Cosmos3-Nano](https://huggingface.co/nvidia/Cosmos3-Nano) | 16 billion | RTX Pro 6000, H100, B200 |
 | [Cosmos3-Super](https://huggingface.co/nvidia/Cosmos3-Super) | 64 billion | H200, B200, GB200 |
 
-The sizes and targets are NVIDIA's figures from their README, not measured here.
+The sizes and targets are NVIDIA's figures from their README, not measured here. The 4 billion counts both parts of the model. The reasoner alone, which is what `transformers` loads, is 2.44 billion parameters.
 
 Why this guide uses Edge:
 
-- **It fits the hardware a first-timer has.** The `transformers` library loads only the reasoner, which counted 2.44 billion parameters and held 4.9 GB on the GPU in this notebook. The highest peak in the whole run was 10.0 GB, while a second copy was loaded for a comparison.
+- **It fits the hardware a first-timer has.** See the hardware profile below.
 - **It is the size made for edge boards**, which is where my projects run.
 - **The method carries over.** The larger models load through a different class and will score differently. They are not measured in this guide.
+
+## Hardware profile
+
+Measured in this guide, on `rtx-5090-workstation` (RTX 5090, 32 GB), float16 weights:
+
+| What | Measured |
+|---|---|
+| Download | about 7.7 GB of files; the reasoner uses part of it |
+| Weights on the GPU | 4.9 GB |
+| Peak during a single call | 4.9 to 5.8 GB, depending on the vision budget |
+| Peak with eight questions batched | 6.7 GB |
+| Peak with a second copy loaded (Part 16) | 10.0 GB, the highest in the run |
+| Speed on a 200-token description | 147 tokens a second |
+| Load time from a local disk | 2 seconds |
+
+NVIDIA's own figures for the same reasoner on Jetson boards, from the model card. These were measured by NVIDIA with `transformers` in eager mode on an image prompt of 911 tokens, not by me:
+
+| Board | Writing speed | One full request |
+|---|---|---|
+| Jetson AGX Thor T5000, 128 GB, MAXN | 42.6 tokens a second | 3.17 s |
+| Jetson AGX Orin, 64 GB | 12.3 tokens a second | 10.81 s |
+
+What NVIDIA lists as supported: Ampere, Hopper and Blackwell GPUs, on Linux, with BF16 as the only tested precision. Colab's free T4 is an older generation (Turing) that is not on that list and does not run BF16 natively, which is why the notebook loads float16. On this workstation float16 and BF16 gave the same scores (Part 16). Whether the notebook runs on a T4 is not yet tested.
 
 ## What it covers
 

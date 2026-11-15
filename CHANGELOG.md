@@ -2,6 +2,9 @@
 
 ## 2026-11-15
 
+- Add background to the README: why Cosmos 3, what is the same and what
+  is different from Cosmos Reason 2, what it does better and what it costs,
+  and a hardware profile with measured figures and NVIDIA's Jetson figures.
 - Add the notebook, its plain-text source and the builder. The tests and
   media are those of the Cosmos Reason 2 first-timers guide, run on the
   Cosmos3-Edge reasoner.
