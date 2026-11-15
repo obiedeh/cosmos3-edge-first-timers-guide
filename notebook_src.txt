@@ -1516,7 +1516,7 @@ show(ask("What happens here?", video="my_clip.mp4", clip=(10, 20)))       # only
 
 ### About the author
 
-Obinna Edeh runs EmbodiedEdge, a Physical AI lab. He designs and builds Physical AI and edge AI systems, and proves them on real robots and hardware. He runs Cosmos Reason 2 on a Jetson AGX Thor.
+Obinna Edeh runs EmbodiedEdge, a Physical AI lab. He designs and builds Physical AI and edge AI systems, and proves them on real robots and hardware. He runs Cosmos Reason 2 and Cosmos3-Edge on a Jetson AGX Thor.
 
 - Urban Edge Vision Analytics: https://github.com/obiedeh/urban-edge-vision-analytics ([video](https://www.youtube.com/watch?v=PtIh9hnD8Lo))
 - Physical AI Safety Observability: https://github.com/obiedeh/physical-ai-safety-observability ([video](https://www.youtube.com/watch?v=bXhttNSlDP0))

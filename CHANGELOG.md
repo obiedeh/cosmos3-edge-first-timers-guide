@@ -2,6 +2,8 @@
 
 ## 2026-11-15
 
+- The author line names both models run on the Jetson AGX Thor: Cosmos
+  Reason 2 and Cosmos3-Edge.
 - Record the Colab A100 run: every cell ran. The About line and the README
   now name both Colab runtimes, T4 and A100.
 - Record the first Colab run: every cell ran on the T4 GPU runtime. The
