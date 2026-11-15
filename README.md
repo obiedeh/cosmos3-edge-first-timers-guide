@@ -4,6 +4,8 @@ A hands-on how-to for the NVIDIA Cosmos3-Edge reasoner on images and video, from
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/obiedeh/cosmos3-edge-first-timers-guide/blob/main/cosmos3_edge_first_timers_guide.ipynb)
 
+**The companion guide.** [Cosmos Reason 2 for First-Timers](https://github.com/obiedeh/cosmos-reason2-first-timers-guide) runs the same tests on Cosmos Reason 2 (2B). The two can be read in either order.
+
 ## What one setting does
 
 Two charts from the notebook, measured on `rtx-5090-workstation` on 2026-11-15.

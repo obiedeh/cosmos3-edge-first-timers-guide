@@ -5,6 +5,8 @@
 
 **By Obinna Edeh**, Head of Physical AI Lab, EmbodiedEdge
 
+**The companion guide.** [Cosmos Reason 2 for First-Timers](https://colab.research.google.com/github/obiedeh/cosmos-reason2-first-timers-guide/blob/main/cosmos_reason2_first_timers_guide.ipynb) runs the same tests on Cosmos Reason 2 (2B), the model this guide was first written for. If you start here, you can go back to it at any time. The two can be read in either order.
+
 **Why I built this.** I wrote [the same kind of guide for Cosmos Reason 2](https://github.com/obiedeh/cosmos-reason2-first-timers-guide), the model behind my [Urban Edge Vision Analytics](https://github.com/obiedeh/urban-edge-vision-analytics) and [Physical AI Safety Observability](https://github.com/obiedeh/physical-ai-safety-observability) projects. NVIDIA has since released Cosmos 3, and its smallest model, Cosmos3-Edge, is the one sized for the boards I work on. The settings I learned on Reason 2 do not all carry over. Thinking is switched on by default, a video is turned into tokens differently, and 4-bit loading, which I used on Reason 2, returned no readable text here. So I ran the same tests again on Cosmos3-Edge and wrote down what each setting does to accuracy and response time.
 
 **Why Google Colab.** I built it for Colab on purpose, to make the model easier to learn and adopt. It runs in a browser with nothing to install on your own machine, so a first-timer can go from zero to a working call without owning a GPU.

@@ -2,6 +2,9 @@
 
 ## 2026-11-15
 
+- Link the companion Cosmos Reason 2 guide near the top of the notebook
+  and the README, with a direct Colab link, so a reader can open either
+  guide first.
 - The author line names both models run on the Jetson AGX Thor: Cosmos
   Reason 2 and Cosmos3-Edge.
 - Record the Colab A100 run: every cell ran. The About line and the README
