@@ -2,6 +2,9 @@
 
 ## 2026-11-15
 
+- Record the first Colab run: every cell ran on the T4 GPU runtime. The
+  About line now names Colab and the workstation; the README drops "not run
+  on Colab yet".
 - Add background to the README: why Cosmos 3, what is the same and what
   is different from Cosmos Reason 2, what it does better and what it costs,
   and a hardware profile with measured figures and NVIDIA's Jetson figures.
