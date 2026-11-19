@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-18
+
+- Add the executed record of a full run on Colab's free T4 GPU runtime,
+  with every output, and link it from the README. Note the one visible
+  difference from the workstation: a Part 9 thinking answer cut off at
+  800 tokens.
+
 ## 2026-11-15
 
 - Link the companion Cosmos Reason 2 guide near the top of the notebook

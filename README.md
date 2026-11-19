@@ -162,7 +162,7 @@ The first run downloads about 7.7 GB of model files, and about 50 MB of NVIDIA's
 | Model | `nvidia/Cosmos3-Edge`, reasoner only, float16 weights, about 7.7 GB to download and 4.9 GB on the GPU |
 | Library | `transformers==5.23.0`, with `accelerate` 1.15.0 and `bitsandbytes` 0.50.2 |
 | Measured on | `rtx-5090-workstation`, Python 3.12.3, PyTorch 2.11.0 with CUDA 12.8, 2026-11-15 |
-| Colab | T4 and A100 GPU runtimes, 2026-11-15: every cell ran on both. That output is not kept in this repo; the figures here are from `rtx-5090-workstation`. |
+| Colab | T4 and A100 GPU runtimes, 2026-11-15: every cell ran on both; that output was not kept. T4 again on 2026-11-18: every cell ran with no errors, record [`cosmos3_edge_first_timers_guide.executed.colab-t4.2026-11-18.ipynb`](records/cosmos3_edge_first_timers_guide.executed.colab-t4.2026-11-18.ipynb). The figures here are from `rtx-5090-workstation`. |
 | Server tests (Part 17) | vLLM 0.33.0 on `rtx-5090-workstation`, 2026-11-15. Reference text in the notebook, not executed cells. The requests and replies are in [`records/server_tests/`](records/server_tests/). |
 
 NVIDIA states that it tested the model in BF16 precision only. The notebook loads float16 so that it can run on GPUs without native BF16. On `rtx-5090-workstation` the two gave the same scores and the same speed (Part 16).
@@ -253,7 +253,7 @@ Kept as found. Nothing here was cleaned up to make the work look smoother.
 
 ## What is not established
 
-- **The Colab runs are not recorded.** Every cell ran on a Colab T4 and a Colab A100, but their scores and timings were not kept, so whether they match the workstation's is not shown.
+- **Only one Colab run is recorded.** The T4 run of 2026-11-18 is kept in [`records/`](records/cosmos3_edge_first_timers_guide.executed.colab-t4.2026-11-18.ipynb); the A100 run was not kept. Its scores have not been compared with the workstation's line by line. One difference is visible: in Part 9 one question with thinking on ran to the 800-token limit before answering on the T4, which it did not on the workstation.
 - **These are small tests.** Each accuracy test has 4 to 12 questions. They show an effect. They are not benchmarks.
 - **Timings are from an RTX 5090.** Expect slower numbers on other GPUs.
 - **One machine.** Two runs gave the same scores. Only the first has clean timings.
