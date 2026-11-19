@@ -6,6 +6,9 @@
   with every output, and link it from the README. Note the one visible
   difference from the workstation: a Part 9 thinking answer cut off at
   800 tokens.
+- Add the executed record of a full run on a Colab A100 runtime. The same
+  Part 9 thinking answer cut off there too, so the README now says the
+  difference is between Colab and the workstation, not the T4 alone.
 
 ## 2026-11-15
 
